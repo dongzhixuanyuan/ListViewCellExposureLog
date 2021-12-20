@@ -77,7 +77,7 @@ CellExposureLogUITableView,CellExposureLogUICollectionView,CellExposureLogCollec
 
 ## Architecture
 
-![Image text](https://gitlab.corp.youdao.com/luna-ios-framework/listviewcellexposurelog/-/raw/master/images/architecture_UML.jpg)
+![Image text](https://raw.githubusercontent.com/dongzhixuanyuan/ListViewCellExposureLog/main/images/architecture_UML.jpg)
 
 ## Requirements
 
