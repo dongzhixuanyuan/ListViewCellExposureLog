@@ -1,0 +1,6 @@
+framework module ListViewCellExposureLog {
+  umbrella header "ListViewCellExposureLog-umbrella.h"
+
+  export *
+  module * { export * }
+}

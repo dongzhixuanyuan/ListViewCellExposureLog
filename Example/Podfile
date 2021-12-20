@@ -1,0 +1,17 @@
+use_frameworks!
+
+platform :ios, '11.0'
+
+target 'ListViewCellExposureLog_Example' do
+  pod 'ListViewCellExposureLog', :path => '../'
+  pod 'SnapKit', '~> 5.0.0'
+  pod 'MJRefresh'
+  pod 'RxSwift', '~> 5'
+  pod 'RxCocoa', '~> 5'
+  pod 'CollectionKit'
+  target 'ListViewCellExposureLog_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

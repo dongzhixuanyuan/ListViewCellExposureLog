@@ -1,0 +1,22 @@
+{
+  "name": "ListViewCellExposureLog",
+  "version": "0.1.0",
+  "summary": "A short description of ListViewCellExposureLog.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://gitlab.corp.youdao.com/luna-ios-framework/listviewcellexposurelog",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "liudong": "liudong@rd.netease.com"
+  },
+  "source": {
+    "git": "https://gitlab.corp.youdao.com/luna-ios-framework/listviewcellexposurelog.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "11.0"
+  },
+  "source_files": "ListViewCellExposureLog/Classes/**/*"
+}

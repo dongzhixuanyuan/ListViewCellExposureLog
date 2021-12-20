@@ -1,0 +1,47 @@
+PODS:
+  - CollectionKit (2.4.0):
+    - CollectionKit/Core (= 2.4.0)
+  - CollectionKit/Core (2.4.0)
+  - ListViewCellExposureLog (0.1.0)
+  - MJRefresh (3.7.2)
+  - RxCocoa (5.1.3):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.1.3):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.3)
+  - SnapKit (5.0.1)
+
+DEPENDENCIES:
+  - CollectionKit
+  - ListViewCellExposureLog (from `../`)
+  - MJRefresh
+  - RxCocoa (~> 5)
+  - RxSwift (~> 5)
+  - SnapKit (~> 5.0.0)
+
+SPEC REPOS:
+  trunk:
+    - CollectionKit
+    - MJRefresh
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SnapKit
+
+EXTERNAL SOURCES:
+  ListViewCellExposureLog:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  CollectionKit: 8f01e7629185bb81072c4aa734d105df5c2d1c8b
+  ListViewCellExposureLog: 018c59970c1958a76c891ec67b2131bfb4c36462
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
+  RxCocoa: e2ed092d5432e4296aa818021d27de4090ac0354
+  RxRelay: 5a18c2eb2d68326ebaf0112f80d837ae41b92b97
+  RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+
+PODFILE CHECKSUM: 649405d46c4ab0aa50dc33448ad577229acca550
+
+COCOAPODS: 1.11.2
