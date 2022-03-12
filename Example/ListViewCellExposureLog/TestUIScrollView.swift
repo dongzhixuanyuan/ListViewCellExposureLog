@@ -37,7 +37,7 @@ class TestUIScrollView: CellExposureLogUIScrollView<Int> {
         }
     }
     
-    override var extraEdgeInset: UIEdgeInsets? {
+     override var extraEdgeInset: UIEdgeInsets? {
         get {
             if TestExposureViewController.addFloatView {
                 return UIEdgeInsets(top: 0, left: 0, bottom: 200, right: 0)
@@ -106,7 +106,7 @@ class TestUIScrollView: CellExposureLogUIScrollView<Int> {
         items.forEach { item in
             result += item.toString()
         }
-        debugPrint("\(TAG):TestUIScrollView::outputCompleteVisibleItems:\(result)")
+        debugPrint("\(TAG)::outputCompleteVisibleItems:\(result)")
     }
 
     override func outputPartVisibleItems(items: Set<KeyIndexCompose<Int, CellExposureLogUIScrollView<Int>.IndexType>>) {
@@ -115,7 +115,7 @@ class TestUIScrollView: CellExposureLogUIScrollView<Int> {
         items.forEach { item in
             result += item.toString()
         }
-        debugPrint("\(TAG):TestUIScrollView::outputPartVisibleItems:\(result)")
+        debugPrint("\(TAG)::outputPartVisibleItems:\(result)")
     }
     
     override func outputCustomExposureRatioItems(items: Set<KeyIndexCompose<Int, CellExposureLogUIScrollView<Int>.IndexType>>) {
@@ -124,7 +124,7 @@ class TestUIScrollView: CellExposureLogUIScrollView<Int> {
         items.forEach { item in
             result += item.toString()
         }
-        debugPrint("\(TAG):TestUIScrollView::outputCustomExposureRatioItems:\(result)")
+        debugPrint("\(TAG)::outputCustomExposureRatioItems:\(result)")
     }
     
     lazy var firstView: UIView = {

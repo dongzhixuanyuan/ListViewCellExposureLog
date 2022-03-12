@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// 带有Cell曝光统计功能的UITableView
-open class CellExposureLogUITableView<KeyType: Hashable>: UITableView, UITableViewDelegate, ExposureCellInputer, ExposureCellOutputer, KeyIndexMapper {
+open class CellExposureLogUITableView<KeyType: Hashable>: UITableView, ExposureCellInputer, ExposureCellOutputer, KeyIndexMapper {
     public typealias KeyType = KeyType
     
     public typealias IndexType = IndexPath
@@ -46,20 +46,6 @@ open class CellExposureLogUITableView<KeyType: Hashable>: UITableView, UITableVi
     
 //    MARK: ExposureCellInputer Delegate
 
-    open var visibleRect: CGRect {
-        get {
-            var windowVisibleRect = self.window?.bounds ?? .zero
-            if let edgeInset = self.extraEdgeInset {
-                //            UIView有被其他顶层View遮挡的情况
-                windowVisibleRect = CellExposureLogUtil.transformRectWithEdgeInset(sourceRect: windowVisibleRect, edgeInset: edgeInset)
-            }
-            return self.convert(self.bounds, to: self.window).intersection(windowVisibleRect) // 在屏幕范围内的可见区域
-        }
-        set {
-            self.visibleRect = newValue
-        }
-    }
-
     open var extraEdgeInset: UIEdgeInsets?
     
     /// Must override
@@ -74,19 +60,12 @@ open class CellExposureLogUITableView<KeyType: Hashable>: UITableView, UITableVi
     }
 
     open func curVisibleItems() -> [ExposureItem<KeyType, IndexType>] {
-        if indexPathsForVisibleRows?.isEmpty ?? true {
-            return []
-        }
-        return indexPathsForVisibleRows!.compactMap { indexpath in
-            if let cell = cellForRow(at: indexpath) {
-                let screenRect = cell.convert(cell.bounds, to: self.window)
-                if screenRect.width > 0, screenRect.height > 0,let key = indexMapToKey(index: indexpath) {
-                    return ExposureItem(identifier: key, index: indexpath, rect: screenRect)
-                }
-                return nil
+        return indexPathsForVisibleRows?.compactMap { indexpath in
+            if let cell = cellForRow(at: indexpath), let key = indexMapToKey(index: indexpath) {
+                return CellExposureLogUtil.cellTransferToExposureItem(key: key, indexpath: indexpath, cell: cell)
             }
             return nil
-        }
+        } ?? []
     }
     
     open func calculateSignal(forceCalculate: Bool, delaySeconds: Double?) {
@@ -111,6 +90,9 @@ open class CellExposureLogUITableView<KeyType: Hashable>: UITableView, UITableVi
         self.exposureOutputerDelegate?.outputCustomExposureRatioItems(items: items)
     }
     
+    open func currentExposureItems(partVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, completeVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, customExposureRatioVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, curVisibleRect: CGRect) {
+        self.exposureOutputerDelegate?.currentExposureItems(partVisibleItems: partVisibleItems, completeVisibleItems: completeVisibleItems, customExposureRatioVisibleItems: customExposureRatioVisibleItems, curVisibleRect: curVisibleRect)
+    }
         
     override open func willMove(toSuperview newSuperview: UIView?) {
         isAttached = (newSuperview != nil)

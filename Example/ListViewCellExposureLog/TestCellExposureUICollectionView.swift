@@ -78,7 +78,6 @@ class TestCellExposureUICollectionView: CellExposureLogUICollectionView<String>,
         mjFooter.setTitle("上拉加载更多", for: .idle)
         self.mj_footer = mjFooter
         showsVerticalScrollIndicator = false
-        delegate = self
         dataSource = self
     }
     

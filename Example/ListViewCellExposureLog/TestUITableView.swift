@@ -66,7 +66,6 @@ class CustomUITableView: CellExposureLogUITableView<String>, UITableViewDataSour
         self.mj_footer = mjFooter
         showsVerticalScrollIndicator = false
         separatorStyle = .none
-        delegate = self
         dataSource = self
     }
     

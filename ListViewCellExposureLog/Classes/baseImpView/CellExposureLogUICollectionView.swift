@@ -7,7 +7,8 @@
 
 import Foundation
 
-open class CellExposureLogUICollectionView<KeyType: Hashable>: UICollectionView, UICollectionViewDelegate, ExposureCellInputer, ExposureCellOutputer,KeyIndexMapper {
+open class CellExposureLogUICollectionView<KeyType: Hashable>: UICollectionView, ExposureCellInputer, ExposureCellOutputer,KeyIndexMapper {
+    
     public typealias KeyType = KeyType
 
     public typealias IndexType = IndexPath
@@ -55,33 +56,12 @@ open class CellExposureLogUICollectionView<KeyType: Hashable>: UICollectionView,
 
     //  MARK: ExposureCellInputer Delegate
 
-    open var visibleRect: CGRect {
-        get {
-            var windowVisibleRect = self.window?.bounds ?? .zero
-            if let edgeInset = self.extraEdgeInset {
-                //            UIView有被其他顶层View遮挡的情况
-                windowVisibleRect = CellExposureLogUtil.transformRectWithEdgeInset(sourceRect: windowVisibleRect, edgeInset: edgeInset)
-            }
-            return self.convert(self.bounds, to: self.window).intersection(windowVisibleRect) // 在屏幕范围内的可见区域
-        }
-        set {
-            self.visibleRect = newValue
-        }
-    }
-
     open var extraEdgeInset: UIEdgeInsets?
 
     open func curVisibleItems() -> [ExposureItem<KeyType, IndexType>] {
-        if indexPathsForVisibleItems.isEmpty {
-            return []
-        }
         return indexPathsForVisibleItems.compactMap { indexpath in
-            if let cell = cellForItem(at: indexpath) {
-                let screenRect = cell.convert(cell.bounds, to: self.window)
-                if screenRect.width > 0, screenRect.height > 0,let key = indexMapToKey(index: indexpath) {
-                    return ExposureItem(identifier: key, index: indexpath, rect: screenRect)
-                }
-                return nil
+            if let cell = cellForItem(at: indexpath), let key = indexMapToKey(index: indexpath) {
+                return CellExposureLogUtil.cellTransferToExposureItem(key: key, indexpath: indexpath, cell: cell)
             }
             return nil
         }
@@ -107,6 +87,10 @@ open class CellExposureLogUICollectionView<KeyType: Hashable>: UICollectionView,
 
     open func outputCustomExposureRatioItems(items: Set<KeyIndexCompose<KeyType, IndexType>>) {
         self.exposureOutputerDelegate?.outputCustomExposureRatioItems(items: items)
+    }
+    
+    open func currentExposureItems(partVisibleItems: Set<KeyIndexCompose<KeyType, IndexPath>>, completeVisibleItems: Set<KeyIndexCompose<KeyType, IndexPath>>, customExposureRatioVisibleItems: Set<KeyIndexCompose<KeyType, IndexPath>>, curVisibleRect: CGRect) {
+        self.exposureOutputerDelegate?.currentExposureItems(partVisibleItems: partVisibleItems, completeVisibleItems: completeVisibleItems, customExposureRatioVisibleItems: customExposureRatioVisibleItems, curVisibleRect: curVisibleRect)
     }
 
     override open func willMove(toSuperview newSuperview: UIView?) {

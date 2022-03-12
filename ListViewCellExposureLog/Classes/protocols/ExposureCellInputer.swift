@@ -76,3 +76,29 @@ public extension ExposureCellInputerTemplate {
         return ExposureCellInputerWrapper<Input>.init(input)
     }
 }
+
+public extension ExposureCellInputer where Self: UIScrollView {
+    var visibleRect: CGRect {
+        get {
+            var windowVisibleRect = self.window?.bounds ?? .zero
+            if let edgeInset = self.extraEdgeInset {
+                //  UIView有被其他顶层View遮挡的情况
+                windowVisibleRect = CellExposureLogUtil.transformRectWithEdgeInset(sourceRect: windowVisibleRect, edgeInset: edgeInset)
+            }
+            return self.convert(self.bounds, to: self.window).intersection(windowVisibleRect) // 在屏幕范围内的可见区域
+        }
+        set {
+            self.visibleRect = newValue
+        }
+    }
+
+    var extraEdgeInset: UIEdgeInsets? {
+        get {
+            return nil
+        }
+        set {
+            extraEdgeInset = newValue
+        }
+    }
+    
+}

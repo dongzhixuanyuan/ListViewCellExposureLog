@@ -69,15 +69,12 @@ open class CellExposureLogUIView<KeyType:Hashable>: UIView, ExposureCellInputer,
     }
         
     open func curVisibleItems() -> [ExposureItem<KeyType,IndexType>] {
-        var result = [ExposureItem<KeyType,IndexType>]()
-        exposureCalculateViews?.enumerated()
-            .forEach { iterator in
-                let screenFrame = iterator.element.convert(iterator.element.bounds, to: self.window)
-                if screenFrame.width > 0, screenFrame.height > 0,let  key = indexMapToKey(index: iterator.offset) {
-                    result.append(ExposureItem<KeyType,IndexType>.init(identifier: key,index: iterator.offset, rect: screenFrame))
-                }
-            }
-        return result
+        return exposureCalculateViews?.enumerated().compactMap({ iterator in
+             if let key = indexMapToKey(index: iterator.offset) {
+                 return CellExposureLogUtil.cellTransferToExposureItem(key: key, indexpath: iterator.offset, cell: iterator.element)
+             }
+             return nil
+         }) ?? []
     }
     
     open func calculateSignal(forceCalculate: Bool, delaySeconds: Double?) {
@@ -99,6 +96,10 @@ open class CellExposureLogUIView<KeyType:Hashable>: UIView, ExposureCellInputer,
     
     open func outputCustomExposureRatioItems(items: Set<KeyIndexCompose<KeyType,IndexType>>) {
         self.exposureOutputerDelegate?.outputCustomExposureRatioItems(items: items)
+    }
+    
+    open func currentExposureItems(partVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, completeVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, customExposureRatioVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, curVisibleRect: CGRect) {
+        self.exposureOutputerDelegate?.currentExposureItems(partVisibleItems: partVisibleItems, completeVisibleItems: completeVisibleItems, customExposureRatioVisibleItems: customExposureRatioVisibleItems, curVisibleRect: curVisibleRect)
     }
     
     override open func willMove(toSuperview newSuperview: UIView?) {

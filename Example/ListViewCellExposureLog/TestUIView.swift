@@ -67,7 +67,18 @@ class TestExposureUIView: CellExposureLogUIView<Int> {
         setupUI()
     }
     private let subviewHeight = [200, 250, 300, 350, 400]
-
+    
+    override var extraEdgeInset: UIEdgeInsets? {
+        get {
+            if TestExposureViewController.addFloatView {
+                return UIEdgeInsets(top: 0, left: 0, bottom: 200, right: 0)
+            }
+            return nil
+        }
+        set {
+            self.extraEdgeInset = newValue
+        }
+    }
     
     override var exposureCalculateViews: [UIView]? {
         return [firstView, secondView, thirdView, fourthView, fiveView]

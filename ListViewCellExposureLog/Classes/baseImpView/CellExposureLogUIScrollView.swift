@@ -3,6 +3,7 @@ import Foundation
 
 /// UIScrollView跟UITableview和UICollectionview曝光有个区别，tablewview和collectionview都是以cell为单位进行曝光计算的，但是UIScrollview对哪些View曝光计算是需要自己定义的
 open class CellExposureLogUIScrollView<KeyType: Hashable>: UIScrollView, ExposureCellInputer, ExposureCellOutputer,KeyIndexMapper {
+    
     public typealias KeyType = KeyType
     
     public typealias IndexType = Int
@@ -38,30 +39,14 @@ open class CellExposureLogUIScrollView<KeyType: Hashable>: UIScrollView, Exposur
 //    MARK: ExposureCellInputer Delegate
 
     open var extraEdgeInset: UIEdgeInsets?
-    open var visibleRect: CGRect {
-        get {
-            var windowVisibleRect = self.window?.bounds ?? .zero
-            if let edgeInset = self.extraEdgeInset {
-    //            UIView有被其他顶层View遮挡的情况
-                windowVisibleRect = CellExposureLogUtil.transformRectWithEdgeInset(sourceRect: windowVisibleRect, edgeInset: edgeInset)
-            }
-            return self.convert(self.bounds, to: self.window).intersection(windowVisibleRect) // 在屏幕范围内的可见区域
-        }
-        set {
-            self.visibleRect = newValue
-        }
-    }
         
     open func curVisibleItems() -> [ExposureItem<KeyType,IndexType>] {
-        var result = [ExposureItem<KeyType,IndexType>]()
-        exposureCalculateViews?.enumerated()
-            .forEach { iterator in
-                let screenFrame = iterator.element.convert(iterator.element.bounds, to: self.window)
-                if screenFrame.width > 0, screenFrame.height > 0,let key = indexMapToKey(index: iterator.offset) {
-                    result.append(ExposureItem<KeyType,IndexType>.init(identifier: key,index: iterator.offset, rect: screenFrame))
-                }
+       return exposureCalculateViews?.enumerated().compactMap({ iterator in
+            if let key = indexMapToKey(index: iterator.offset) {
+                return CellExposureLogUtil.cellTransferToExposureItem(key: key, indexpath: iterator.offset, cell: iterator.element)
             }
-        return result
+            return nil
+        }) ?? []
     }
     
     open func calculateSignal(forceCalculate: Bool, delaySeconds: Double?) {
@@ -84,6 +69,10 @@ open class CellExposureLogUIScrollView<KeyType: Hashable>: UIScrollView, Exposur
 
     open func outputCustomExposureRatioItems(items: Set<KeyIndexCompose<KeyType, IndexType>>) {
         self.exposureOutputerDelegate?.outputCustomExposureRatioItems(items: items)
+    }
+    
+    open func currentExposureItems(partVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, completeVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, customExposureRatioVisibleItems: Set<KeyIndexCompose<KeyType, IndexType>>, curVisibleRect: CGRect) {
+        self.exposureOutputerDelegate?.currentExposureItems(partVisibleItems: partVisibleItems, completeVisibleItems: completeVisibleItems, customExposureRatioVisibleItems: customExposureRatioVisibleItems, curVisibleRect: curVisibleRect)
     }
     
     override open func willMove(toSuperview newSuperview: UIView?) {

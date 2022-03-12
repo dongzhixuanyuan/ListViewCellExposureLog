@@ -33,7 +33,7 @@ public final class KeyIndexMapperWrapper<Mapper: KeyIndexMapper>: KeyIndexMapper
 
     override public func indexMapToKey(index: Mapper.IndexType) -> Mapper.KeyType? {
         guard self.mapper != nil else {
-            fatalError()
+            return nil
         }
         return self.mapper!.indexMapToKey(index: index)
     }
@@ -42,5 +42,15 @@ public final class KeyIndexMapperWrapper<Mapper: KeyIndexMapper>: KeyIndexMapper
 public extension KeyIndexMapperTemplate {
     static func make<Mapper: KeyIndexMapper>(_ mapper: Mapper) -> KeyIndexMapperTemplate<KeyType, IndexType> where Mapper.KeyType == KeyType, Mapper.IndexType == IndexType {
         return KeyIndexMapperWrapper<Mapper>.init(mapper)
+    }
+}
+
+public extension KeyIndexMapper {
+    func indexMapToKey(index: Int) -> Int? {
+        return index
+    }
+
+    func indexMapToKey(index: IndexPath) -> IndexPath? {
+        return index
     }
 }

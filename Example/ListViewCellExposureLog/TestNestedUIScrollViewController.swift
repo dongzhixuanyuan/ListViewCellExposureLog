@@ -14,10 +14,15 @@ import SnapKit
 import UIKit
 
 /// 嵌套滑动，当外层ScrollView滑动时，需要手动触发内层ScrollView的曝光计算。
-class TestNestedUIScrollViewController: BaseNestedScrollViewViewController, ExposureCellOutputer {
+class TestNestedUIScrollViewController: BaseNestedScrollViewViewController, ExposureCellOutputer,KeyIndexMapper {
     typealias KeyType = Int
     typealias IndexType = Int
     private let TAG = "TestNestedUIScrollViewController"
+    
+    func indexMapToKey(index: Int) -> Int? {
+        return index
+    }
+    
     var customExposureRatio: Double?
     
     func outputCompleteVisibleItems(items: Set<KeyIndexCompose<Int, Int>>) {
